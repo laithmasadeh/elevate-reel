@@ -1,6 +1,8 @@
 import { Composition, staticFile } from "remotion";
 import { Scene, myCompSchema } from "./Scene";
 import { getMediaMetadata } from "./helpers/get-media-metadata";
+import { Reel } from "./Reel";
+import { timings, totalDurationInFrames } from "./helpers/timings";
 
 // Welcome to the Remotion Three Starter Kit!
 // Two compositions have been created, showing how to use
@@ -51,6 +53,21 @@ export const RemotionRoot: React.FC = () => {
             },
           };
         }}
+      />
+      {/* The Instagram reel. Duration is derived from src/timings.json
+          (every line's start/end + the end card's duration) via
+          calculateMetadata, so editing that file re-times the whole video —
+          nothing here is a hardcoded frame count. */}
+      <Composition
+        id="Reel"
+        component={Reel}
+        fps={timings.fps}
+        width={1080}
+        height={1920}
+        durationInFrames={totalDurationInFrames(timings.fps)}
+        calculateMetadata={() => ({
+          durationInFrames: totalDurationInFrames(timings.fps),
+        })}
       />
     </>
   );
